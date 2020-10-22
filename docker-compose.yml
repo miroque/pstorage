@@ -2,7 +2,7 @@ version: "2"
 
 services:
   db:
-    image: library/postgres:12-alpine
+    image: postgres:12.4-alpine
     env_file:
       - .env
     ports:

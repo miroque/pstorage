@@ -3,10 +3,7 @@ package ru.miroque.pstorage.entity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,10 +17,15 @@ public class ControllerPersonality {
 
     @GetMapping("/api/p/")
     public void create() {
+        ZonedDateTime zdt = ZonedDateTime.now();
+        zdt.toInstant();
         Personality item = new Personality();
-        item.setLdt(LocalDateTime.now());
+//        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = zdt.toLocalDateTime();
+        item.setLdt(now);
         item.setNid(UUID.randomUUID());
         item.setOdt(OffsetDateTime.now());
+
         repositoryPersonality.save(item);
     }
 
