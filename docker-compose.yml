@@ -3,7 +3,16 @@ version: "2"
 services:
   db:
     image: postgres:12.4-alpine
+    hostname: db
     env_file:
       - .env
     ports:
     - 5432:5432
+
+  app:
+    image: github.com/personal-profile/p-storage_master:latest
+    hostname: app
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
