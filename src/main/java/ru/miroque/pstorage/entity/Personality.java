@@ -18,10 +18,5 @@ public class Personality {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID nid;
-    private LocalDate ld;
-    private LocalDateTime ldt;
-    private OffsetTime ot;
-    private OffsetDateTime odt;
-    private ZonedDateTime zdt;
-    private ZonedDateTime zdt2;
+    private LocalDate birthDate;
 }

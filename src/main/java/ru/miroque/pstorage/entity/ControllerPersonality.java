@@ -17,15 +17,9 @@ public class ControllerPersonality {
 
     @GetMapping("/api/p/")
     public void create() {
-        ZonedDateTime zdt = ZonedDateTime.now();
-        zdt.toInstant();
         Personality item = new Personality();
-//        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime now = zdt.toLocalDateTime();
-        item.setLdt(now);
         item.setNid(UUID.randomUUID());
-        item.setOdt(OffsetDateTime.now());
-
+        item.setBirthDate(LocalDate.now());
         repositoryPersonality.save(item);
     }
 
