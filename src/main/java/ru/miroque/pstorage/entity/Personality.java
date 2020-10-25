@@ -2,6 +2,7 @@ package ru.miroque.pstorage.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@ToString
 public class Personality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
