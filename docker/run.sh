@@ -10,4 +10,16 @@ done
 #    sleep 1
 #done
 
-exec java -Dspring.profiles.active=prod -cp app:app/lib/* ru.miroque.pstorage.PstorageApplication
+if [ -z ${TZ+x} ]; then echo "TZ is unset" TZ="UTC"; else echo "TZ was defined"; fi
+
+echo "TZ is set to '$TZ'";
+
+#if [[ -z "${TZ}" ]]; then
+#  DTZ="UTC"
+#  echo "Default value to UTC"
+#else
+#  DTZ="${TZ}"
+#  echo $DTZ
+#fi
+
+exec java -Duser.timezone=$DTZ -Dspring.profiles.active=prod -cp app:app/lib/* ru.miroque.pstorage.PstorageApplication
