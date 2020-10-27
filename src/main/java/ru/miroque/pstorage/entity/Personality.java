@@ -1,8 +1,6 @@
 package ru.miroque.pstorage.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +13,16 @@ import java.util.UUID;
 @Setter
 @Entity
 @ToString
+@NoArgsConstructor
 public class Personality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID nid;
     private LocalDate birthDate;
+
+    public Personality(UUID nid, LocalDate birthDate) {
+        this.nid = nid;
+        this.birthDate = birthDate;
+    }
 }
