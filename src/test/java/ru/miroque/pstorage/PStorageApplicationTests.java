@@ -1,8 +1,5 @@
 package ru.miroque.pstorage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,11 +16,13 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Testcontainers
 class PStorageApplicationTests {
     @Container
-    public static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:12.4-alpine");
+    public static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:12.4-alpine");
 
     @Autowired
     private RepositoryPersonality rPersonality;
@@ -36,22 +35,9 @@ class PStorageApplicationTests {
     }
 
     @DisplayName("Проверка конфигурации докера")
-    @Disabled
     @Test
     void testOfConfigurationDatasourceConnection(@Autowired Environment env) {
         System.out.println("#test - spring.datasource.url=" + env.getProperty("spring.datasource.url"));
-    }
-
-//    @Disabled
-    @DisplayName("Создание 20 записей")
-    @Test
-    void testCreate20OfPersonalities() {
-        IntStream.rangeClosed(1, 20).mapToObj(i -> new Personality()).forEach(item -> {
-            item.setNid(UUID.randomUUID());
-            item.setBirthDate(LocalDate.now());
-            rPersonality.save(item);
-        });
-        assertEquals(21, rPersonality.findAll().size());
     }
 
     @BeforeEach
@@ -68,28 +54,29 @@ class PStorageApplicationTests {
     @DisplayName("Создать пользователя")
     @Test
     void createItem() {
-        Personality item = new Personality(UUID.fromString("00000000-0000-0000-0000-000000000002"), LocalDate.now());
+        UUID uuid = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        Personality item = new Personality(uuid, LocalDate.now());
         item = rPersonality.save(item);
         assertNotNull(item.getId());
-        assertEquals(2, rPersonality.findAll().size());
+        assertEquals(uuid, item.getNid());
     }
 
     @DisplayName("Вернуть пользователя по ай-ди")
     @Test
     void findItem() {
-        Personality item = rPersonality.findByNid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
-        assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000001"), item.getNid());
-        assertEquals(1, rPersonality.findAll().size());
+        UUID uuid = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        assertEquals(uuid, rPersonality.findByNid(uuid).get().getNid());
     }
 
     @DisplayName("Удалить пользователя")
     @Test
     void deleteItem() {
-//        Personality item = rPersonality.findByNid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
-        Personality item = new Personality(UUID.fromString("00000000-0000-0000-0000-000000000002"), LocalDate.now());
+        UUID uuid = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        Personality item = new Personality(uuid, LocalDate.now());
         item = rPersonality.save(item);
+        assertNotNull(item.getId());
+        assertEquals(uuid, item.getNid());
         rPersonality.delete(item);
-        rPersonality.flush();
-        assertEquals(1, rPersonality.findAll().size());
+        assertFalse(rPersonality.findByNid(uuid).isPresent());
     }
 }
